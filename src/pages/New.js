@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import api from "../services/api";
 
 import "./New.css";
 
@@ -11,10 +12,20 @@ class New extends Component {
     hashtags: "",
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(this.state);
+    const date = new FormData();
+
+    date.append("image", this.state.image);
+    date.append("author", this.state.author);
+    date.append("place", this.state.place);
+    date.append("description", this.state.description);
+    date.append("hashtags", this.state.hashtags);
+
+    await api.post("posts", date);
+
+    this.props.history.push("/");
   };
 
   handleImageChange = (e) => {
@@ -28,7 +39,7 @@ class New extends Component {
   render() {
     return (
       <form id="new-post" onSubmit={this.handleSubmit}>
-        <input type="file" />
+        <input type="file" onChange={this.handleImageChange} />
 
         <input
           type="text"
